@@ -25,7 +25,6 @@ router.get('/', function(req, res){
     })
 
     .then((cont)=>{
-        // console.log(cont);
         fs.readFile("./logs/"+cont, function(err, cont){
             res.statusCode = 200;
             res.setHeader('Content-Type', 'text/plain; charset=utf-8');
@@ -41,20 +40,15 @@ router.get('/', function(req, res){
 
 server.listen(3000);
 
-// app.listen(3000, "172.28.239.49");
-// app.use(bodyParser.urlencoded({extended: false}));
+
 console.log("Server started");
 
-
-var url = 'https://www.cbr-xml-daily.ru/daily_json.js';
 
 var scheduler = cron.job("*/5 * * * * *", function(){
     request(options)
     .then(function(respond){
         console.log("logged");
         var temp = JSON.parse(respond);
-        // console.log(temp['Date'].match(/\d\d\d\d-\d\d-\d\d/g));
-        // console.log(temp);
         fs.writeFile(temp['Date'].match(/\d\d\d\d-\d\d-\d\d/g)+".json", JSON.stringify(temp), function(){});
     })
     .catch(function (err){
